@@ -1,0 +1,7 @@
+{
+  "name": "ionic-storage-sample",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
