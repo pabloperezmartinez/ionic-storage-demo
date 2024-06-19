@@ -35,5 +35,12 @@ export function useStorage() {
         store?.set(REPOS_kEY, repos);
     }
 
-    return {repos, addRepo}
+    const loadRepos = async () => {
+        if (store) {
+            const storedRepos = await store?.get(REPOS_kEY) || [];
+            setRepos(storedRepos);
+        }
+    };
+
+    return {repos, addRepo, loadRepos}
 }

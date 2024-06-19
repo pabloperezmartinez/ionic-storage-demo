@@ -1,13 +1,13 @@
 import { IonButton, IonCard, IonCardContent, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import './Tab2.css';
 import { Repository, useStorage } from '../hooks/useStorage';
 import { code, image, logoGithub, person } from 'ionicons/icons';
+import { useHistory } from 'react-router'
 
 const Tab2: React.FC = () => {
   // usa 'useStorage' para inicializar la lista de repositorios
-
   const {repos, addRepo} = useStorage();
+  const history = useHistory();
 
   const repoData: Repository = {
     name: '',
@@ -40,7 +40,11 @@ const Tab2: React.FC = () => {
   }
 
   const createRepo = async (repo: Repository) => {
-    await addRepo(repo)
+    addRepo(repo).then(() => {
+      history.push('/')
+    }).catch((error) => {
+      console.log('Existe un error de conexión', error);
+    });
   }
 
   return (
