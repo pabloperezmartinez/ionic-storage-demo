@@ -1,14 +1,34 @@
 import { IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonThumbnail, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Tab1.css';
-import { Repository, useStorage } from '../hooks/useStorage';
+import axios from 'axios';
+import { useState } from 'react';
+import { RepositoryItem } from '../interfaces/RepositoryItem';
 
 const Tab1: React.FC = () => {
-  // usa 'useStorage' para inicializar la lista de repositorios
-  let {repos, loadRepos} = useStorage();
+  const [repos, setRepos] = useState<RepositoryItem[]>([]);
+  const loadRepos = async () => {
+    try {
+      const response = await axios.get('https://api.github.com/user/repos',{
+        headers: {
+          Authorization: "Bearer "
+        }
+      });
+      const reposData: RepositoryItem[] = response.data.map((repo: any) => ({
+        name: repo.name,
+        language: repo.language,
+        owner: repo.owner.login,
+        imageUrl: repo.owner.avatar_url,
+        description: repo.description
+      }));
+      setRepos(reposData);
+    } catch (error) {
+      console.error('Error fetching repos:', error);
+    }
+  };
 
   useIonViewWillEnter(() => {
-    loadRepos()
+    loadRepos();
   });
 
   return (
@@ -29,6 +49,7 @@ const Tab1: React.FC = () => {
                 <h2>{repo.name}</h2>
                 <p>Lenguaje: {repo.language}</p>
                 <p>Propietario: {repo.owner}</p>
+                <p>{repo.description}</p>
               </IonLabel>
             </IonItem>
           ))}
