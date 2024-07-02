@@ -11,7 +11,7 @@ const Tab1: React.FC = () => {
     try {
       const response = await axios.get('https://api.github.com/user/repos',{
         headers: {
-          Authorization: "Bearer "
+          Authorization: "Bearer XXXXXX"
         }
       });
       const reposData: RepositoryItem[] = response.data.map((repo: any) => ({
